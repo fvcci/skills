@@ -1,8 +1,11 @@
 # Skills written by other people. install.sh installs them from upstream with `npx skills add`.
-# Format: <source> <skill> [<skill> ...]
+# Format: <source> <skill> [<skill> ...]. A tree URL with a commit SHA pins a version.
 github/gh-stack gh-stack
 clickhouse/agent-skills clickhouse-best-practices clickhouse-architecture-advisor
 DietrichGebert/ponytail ponytail
-mattpocock/skills tdd grilling teach grill-me grill-with-docs
+mattpocock/skills tdd grilling teach grill-me grill-with-docs handoff
 kitlangton/stack stack
 https://github.com/cursor/plugins/tree/main/cursor-team-kit fix-ci get-pr-comments
+# Pinned: later pstack versions make unslop manual-only and drop "Must always apply".
+https://github.com/cursor/plugins/tree/99559f2f52047978602ef365589275831e76af07/pstack unslop
+https://github.com/google-gemini/gemini-cli/tree/main/.gemini/skills pr-creator
