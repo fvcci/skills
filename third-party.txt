@@ -1,0 +1,8 @@
+# Skills written by other people. install.sh installs them from upstream with `npx skills add`.
+# Format: <source> <skill> [<skill> ...]
+github/gh-stack gh-stack
+clickhouse/agent-skills clickhouse-best-practices clickhouse-architecture-advisor
+DietrichGebert/ponytail ponytail
+mattpocock/skills tdd grilling teach
+kitlangton/stack stack
+https://github.com/cursor/plugins/tree/main/cursor-team-kit fix-ci get-pr-comments
