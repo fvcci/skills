@@ -3,6 +3,6 @@
 github/gh-stack gh-stack
 clickhouse/agent-skills clickhouse-best-practices clickhouse-architecture-advisor
 DietrichGebert/ponytail ponytail
-mattpocock/skills tdd grilling teach
+mattpocock/skills tdd grilling teach grill-me grill-with-docs
 kitlangton/stack stack
 https://github.com/cursor/plugins/tree/main/cursor-team-kit fix-ci get-pr-comments
