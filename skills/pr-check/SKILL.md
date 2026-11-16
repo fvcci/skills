@@ -162,7 +162,18 @@ gh pr view <PR> --json headRefOid -q .headRefOid
 gh pr comment <PR> --body '[greptile](greptile) run an apex review'
 ```
 
-Wait for the newly requested Apex review to finish. Existing green checks or an older
+Record the request time (`date -u +%FT%TZ`) and wait with
+[references/wait-for-greptile.sh](references/wait-for-greptile.sh), run in the background:
+
+```bash
+references/wait-for-greptile.sh <PR> <request-time> 45 15
+```
+
+It counts any Greptile response after that time: a check run (waited on until it
+completes), a review, an inline comment, or an edit to an existing comment. Greptile
+updates its summary comment in place, so watching only for new comments misses a
+finished review. Exit 2 means nothing started within the grace period: report that
+Apex did not start instead of waiting longer. Existing green checks or an older
 Greptile review do not establish completion; verify that the new review follows this
 request and covers the recorded head SHA. Read its review body, inline comments, and
 follow-up comments, including "Comments Outside Diff", using steps 4–8.
