@@ -31,6 +31,7 @@ To install only the skills in `skills/`, without cloning: `npx skills add fvcci/
 - `name` matches the folder name; `description` is 1-1024 characters.
 - No hardcoded `~/.claude/skills`, `~/.codex/skills` or `~/.agents/skills` paths. Refer to files relative to the skill folder.
 - Claude's `disable-model-invocation: true` and Codex's `agents/openai.yaml` `policy.allow_implicit_invocation: false` appear together or not at all.
+- Every relative link in a skill's markdown points at a file that exists.
 - A skill is in `skills/` or `third-party.txt`, never both.
 
 `./check.py --local` also compares against this machine. It reports skills installed but not tracked here, tracked skills that are not installed, and names in both `~/.codex/skills` and `~/.agents/skills`, which Codex loads twice.

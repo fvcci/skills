@@ -12,6 +12,8 @@ SKILLS = ROOT / "skills"
 HOME = pathlib.Path.home()
 NAME = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 HARNESS_PATH = re.compile(r"~/\.(claude|codex|agents)/skills|/Users/[^/\s]+/\.(claude|codex|agents)/skills")
+LINK = re.compile(r"\]\(([^)\s]+)\)")
+FENCE = re.compile(r"^(```|~~~).*?^\1", re.S | re.M)
 # Folders that hold skills managed by something else, not by this repo or `npx skills`.
 NOT_OURS = {".system", "synced"}
 
@@ -32,6 +34,15 @@ def frontmatter(path):
         elif key and line.startswith((" ", "\t")):
             fields[key] = (fields[key] + " " + line.strip()).strip()
     return fields
+
+
+def broken_links(path):
+    """Relative links in a markdown file that point at nothing. Code blocks and inline code are skipped."""
+    text = re.sub(r"`[^`\n]*`", "", FENCE.sub("", path.read_text(errors="ignore")))
+    for target in LINK.findall(text):
+        target = target.split("#")[0]
+        if target and not re.match(r"^[a-z][a-z0-9+.-]*:", target) and not (path.parent / target).exists():
+            yield target
 
 
 def third_party():
@@ -65,6 +76,10 @@ def check_repo():
             if f.is_file() and f.suffix in (".md", ".py", ".sh", ".yaml", ".yml", ".ts", ".js"):
                 for m in HARNESS_PATH.finditer(f.read_text(errors="ignore")):
                     errors.append(f"{d.name}: {f.relative_to(d)} hardcodes '{m.group(0)}'; use a path relative to the skill folder")
+
+        for f in d.rglob("*.md"):
+            for target in broken_links(f):
+                errors.append(f"{d.name}: {f.relative_to(d)} links to '{target}', which does not exist")
 
         # Claude reads disable-model-invocation; Codex reads agents/openai.yaml. Keep them in step.
         manual_claude = fm.get("disable-model-invocation", "").lower() == "true"
