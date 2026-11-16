@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 # Install every skill in this repo for Claude Code, Codex, OpenCode and other harnesses.
-#   ./install.sh                    link own skills, then install third-party ones from upstream
-#   ./install.sh --skip-third-party only (re)link own skills
+#   ./install.sh    link every skill in skills/ and third-party/
 #
-# Own skills are symlinked, so editing them here updates every harness at once:
+# Skills are symlinked, so editing them here updates every harness at once:
 #   ~/.agents/skills  read by Codex, OpenCode, Copilot, Zed, ...
 #   ~/.claude/skills  read by Claude Code (it does not read ~/.agents)
 set -euo pipefail
@@ -28,17 +27,10 @@ link() {
 }
 
 failed=0
-for dir in "$repo"/skills/*/; do
+for dir in "$repo"/skills/*/ "$repo"/third-party/*/; do
   name="$(basename "$dir")"
   link "${dir%/}" "$HOME/.agents/skills/$name" || failed=1
   link "${dir%/}" "$HOME/.claude/skills/$name" || failed=1
 done
-echo "linked own skills from $repo/skills"
-
-[ "${1:-}" = "--skip-third-party" ] && exit "$failed"
-
-grep -vE '^\s*(#|$)' "$repo/third-party.txt" | while read -r source skills; do
-  # shellcheck disable=SC2086
-  npx -y skills add "$source" --global --yes --agent claude-code codex opencode --skill $skills </dev/null
-done
+echo "linked skills from $repo/skills and $repo/third-party"
 exit "$failed"

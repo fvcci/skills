@@ -129,21 +129,18 @@ def installed(folder):
 
 
 def check_local():
-    ours = {p.name for p in own_skills()}
-    known = ours | set(third_party())
+    tracked = {p.name: p for p in own_skills()} | {name: THIRD_PARTY / name for name in third_party()}
     claude = installed(HOME / ".claude/skills")
     agents = installed(HOME / ".agents/skills")
     codex = installed(HOME / ".codex/skills")
 
-    for name in sorted(ours):
+    for name, source in sorted(tracked.items()):
         for label, folder in (("~/.claude/skills", claude), ("~/.agents/skills", agents)):
             p = folder.get(name)
-            if p is None or p.resolve() != (SKILLS / name).resolve():
+            if p is None or p.resolve() != source.resolve():
                 errors.append(f"{name}: not linked from {label}; run ./install.sh")
-    for name in sorted(set(third_party()) - set(agents)):
-        errors.append(f"{name}: third-party skill not installed; run ./install.sh")
     for label, folder in (("~/.claude/skills", claude), ("~/.agents/skills", agents), ("~/.codex/skills", codex)):
-        for name in sorted(set(folder) - known):
+        for name in sorted(set(folder) - set(tracked)):
             errors.append(f"{name}: installed in {label} but not in this repo or third-party.txt; add it or remove it")
     # Codex loads both ~/.codex/skills and ~/.agents/skills, so a name in both shows up twice.
     for name in sorted(set(codex) & set(agents)):
