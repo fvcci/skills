@@ -1,6 +1,6 @@
 ---
 name: sniff
-description: Code smells, found and fixed at the end of a change. Use once a change is written, before calling it done; when a diff or PR needs review; or when the user says "sniff". Modes: fast (default), max.
+description: Code smells, found and fixed at the end of a change. Use once a change is written, before calling it done; when a diff or PR needs review; or when the user says "sniff". The modes are fast (default) and max.
 license: MIT
 ---
 

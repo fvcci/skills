@@ -9,6 +9,7 @@ import argparse, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent
 SKILLS = ROOT / "skills"
+THIRD_PARTY = ROOT / "third-party"
 HOME = pathlib.Path.home()
 NAME = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 HARNESS_PATH = re.compile(r"~/\.(claude|codex|agents)/skills|/Users/[^/\s]+/\.(claude|codex|agents)/skills")
@@ -45,6 +46,20 @@ def broken_links(path):
             yield target
 
 
+def unquoted_colons(path):
+    """Frontmatter keys whose plain value holds ': '. Lenient loaders accept it; a strict YAML parser drops the skill."""
+    text = path.read_text()
+    for line in text[4:text.find("\n---", 4)].splitlines():
+        m = re.match(r"^([A-Za-z_-]+):\s+([^'\"|>\[{].*)$", line)
+        if m and ": " in m.group(2):
+            yield m.group(1)
+
+
+def own_skills():
+    """Skill folders in this repo. Dot-folders hold plugin manifests, not skills."""
+    return sorted(p for p in SKILLS.iterdir() if p.is_dir() and not p.name.startswith("."))
+
+
 def third_party():
     names = {}
     for line in (ROOT / "third-party.txt").read_text().splitlines():
@@ -55,7 +70,7 @@ def third_party():
 
 
 def check_repo():
-    for d in sorted(p for p in SKILLS.iterdir() if p.is_dir()):
+    for d in own_skills():
         skill = d / "SKILL.md"
         if not skill.exists():
             errors.append(f"{d.name}: missing SKILL.md")
@@ -64,6 +79,8 @@ def check_repo():
         if fm is None:
             errors.append(f"{d.name}: SKILL.md has no frontmatter")
             continue
+        for key in unquoted_colons(skill):
+            errors.append(f"{d.name}: frontmatter '{key}' holds ': ' unquoted, which strict YAML parsers reject; quote it or reword it")
         if fm.get("name") != d.name:
             errors.append(f"{d.name}: name '{fm.get('name')}' must match the folder name")
         if not NAME.match(d.name) or len(d.name) > 64:
@@ -94,6 +111,16 @@ def check_repo():
         if (SKILLS / name).exists():
             errors.append(f"{name}: listed in third-party.txt and also in skills/")
 
+    # third-party/ holds the copies Devin loads. It must match the list, and each copy must still load.
+    copies = {p.name: p for p in THIRD_PARTY.iterdir() if p.is_dir()} if THIRD_PARTY.is_dir() else {}
+    for name in sorted(set(third_party()) - set(copies)):
+        errors.append(f"{name}: listed in third-party.txt but not copied into third-party/; run ./vendor.py {name}")
+    for name, d in sorted(copies.items()):
+        if name not in third_party():
+            errors.append(f"{name}: in third-party/ but not listed in third-party.txt")
+        for key in unquoted_colons(d / "SKILL.md"):
+            errors.append(f"{name}: upstream frontmatter '{key}' holds ': ' unquoted, which strict YAML parsers reject")
+
 
 def installed(folder):
     if not folder.is_dir():
@@ -102,7 +129,7 @@ def installed(folder):
 
 
 def check_local():
-    ours = {p.name for p in SKILLS.iterdir() if p.is_dir()}
+    ours = {p.name for p in own_skills()}
     known = ours | set(third_party())
     claude = installed(HOME / ".claude/skills")
     agents = installed(HOME / ".agents/skills")
@@ -127,7 +154,7 @@ def check_project(root):
     project = set()
     for sub in (".agents/skills", ".claude/skills", ".codex/skills"):
         project |= set(installed(pathlib.Path(root) / sub))
-    for name in sorted(project & ({p.name for p in SKILLS.iterdir()} | set(third_party()))):
+    for name in sorted(project & ({p.name for p in own_skills()} | set(third_party()))):
         errors.append(f"{name}: also a skill in {root}; inside that repo two skills share this name")
 
 

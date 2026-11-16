@@ -1,0 +1,10 @@
+{
+  "name": "fvcci",
+  "description": "Felix's agent skills, loaded straight from the repo they are developed in.",
+  "repository": "https://github.com/fvcci/skills",
+  "license": "MIT",
+  "skills": [
+    "skills",
+    "third-party"
+  ]
+}

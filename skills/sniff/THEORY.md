@@ -75,4 +75,9 @@ This document is the hub. The skills below repeat parts of it on purpose, each f
 
 ## Sources
 
-The sources of this theory, and who contributed what, are in this folder's README.
+- John Ousterhout, *A Philosophy of Software Design*: the three costs, as change amplification, cognitive load and unknown unknowns. The two causes, as dependencies and obscurity. Deep modules. Weighting each part by how much time is spent working on it.
+- Matt Pocock's skills repo, <https://github.com/mattpocock/skills>: depth as leverage and the deletion test, in `codebase-design`, and the form of the smell list.
+- Martin Fowler: the definition of a smell, from his "Code Smell" article, and twelve of the smells, from *Refactoring*, as used in Pocock's review skill.
+- Robert C. Martin, *Clean Architecture*: abstract and concrete.
+- Adam Tornhill, *Your Code as a Crime Scene*: files that change together.
+- Sandi Metz: duplication is cheaper than the wrong abstraction.
