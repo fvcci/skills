@@ -10,7 +10,7 @@ A run uses one of two modes. They differ only in step 5:
 
 | Mode | When it runs | What it does |
 |---|---|---|
-| **Fast** | By default | Fixes first, then hands the fixed lines to an agent on the other model family for one more loop |
+| **Fast** | By default | Fixes first, choosing between fixes by the grade in [THEORY.md](THEORY.md), then hands the fixed lines to an agent on the other model family for one more loop |
 | **Max** | When the user says "max" | Settles the conflicts first, in a debate for each pair of smells, then fixes |
 
 ## Process
@@ -84,12 +84,13 @@ Fixing one smell can create another. Each row names the smells its fix tends to 
 
 #### Fast mode
 
-The default. Fix first, then have another model check what the fixes caused.
+The default. Fix by the theory's grade, then have another model check what the fixes caused.
 
-1. Make the fixes.
-2. Hand the second pass to a fresh agent, so it is read by eyes that did not write the fixes. Write a handoff document as the `handoff` skill describes, in the OS temp directory: the lines your fixes touched, the smell each fix was for, and the list from step 1. Start an agent on the other model family from yours, at the same capability tier and effort level, and give it the document and this skill.
-3. That agent loops once more over the lines your fixes touched, starting with the smells each fixed row names under "Smells the fix can create". It fixes what the second pass finds. When two fixes undo each other, it keeps the version the "YAGNI wins over a fix" check favors and says why in a comment.
-4. Verify behavior is unchanged apart from the changes you report — run the tests, typecheck, or lint the file.
+1. Read [THEORY.md](THEORY.md).
+2. Make the fixes. Where a fix can be made more than one way, or would create another smell, grade the options as "How to grade code quality" in THEORY.md describes, and take the one with the higher grade.
+3. Hand the second pass to a fresh agent, so it is read by eyes that did not write the fixes. Write a handoff document as the `handoff` skill describes, in the OS temp directory: the lines your fixes touched, the smell each fix was for, and the list from step 1. Start an agent on the other model family from yours, at the same capability tier and effort level, and give it the document and this skill, THEORY.md included.
+4. That agent loops once more over the lines your fixes touched, starting with the smells each fixed row names under "Smells the fix can create". It fixes what the second pass finds. When two fixes undo each other, it grades both versions the same way, keeps the one with the higher grade, and says why in a comment.
+5. Verify behavior is unchanged apart from the changes you report — run the tests, typecheck, or lint the file.
 
 Done when every match from step 4 is fixed or left with a comment saying why, and the second pass finds no new match.
 
@@ -102,10 +103,11 @@ Only when the user says "max". Settle the real conflicts in a debate first, then
 3. Run one debate per pair of smells that still has a contested match, with the `debate` skill. A pair is two smells where fixing one can create the other, such as Duplicated Code and Middle Man. The order does not matter: Duplicated Code with Speculative Generality is the same pair as Speculative Generality with Duplicated Code. Take the smells in table order. Run one debate for each such pair, and finish it before the next pair starts. Skip a pair that has already had its debate. Give each debate this brief:
 
    - **Items:** the contested matches of both smells in the pair.
-   - **Question:** for each, is there a fix that resolves both smells? If not, which of the two matters more here, and what is the fix?
-   - **Read first:** every agent in the debate reads [SMELLS.md](SMELLS.md), for the terms and each smell's cost shares, and [THEORY.md](THEORY.md), for the principles.
-   - **The test:** the option that leaves the least cost in the code wins. For each option, name the smells it leaves or creates and add up their cost shares of reading, reach and risk from SMELLS.md. The shares are estimates, so the judge also weighs what it knows of this code and the principles in THEORY.md, and may overrule the numbers when it says why.
-   - **Verdicts:** a fix that resolves both smells, with how; fix as the row says; fix another way, with how; or leave it with a comment saying why. Each verdict gives the costs it compared, and says whether the numbers or the judge's own knowledge decided it.
+   - **Question:** for each, is the fix its row gives the right fix here?
+   - **Sides:** the defender proposes the fix and stands by it. The challenger reviews it and always argues for the lower cost: it names the smells the fix would create, taken from [SMELLS.md](SMELLS.md), and says how the fix should change to leave less reading, reach and risk. Its hard line, when no change saves the fix, is to drop it. Its pressure is there to make the decision sound, so the defender answers each point with evidence from the code.
+   - **Read first:** the defender and the challenger read [SMELLS.md](SMELLS.md), for the terms and each smell's cost shares. The judge reads it too, and [THEORY.md](THEORY.md).
+   - **The test**, for the judge only: the section "How to grade code quality" in [THEORY.md](THEORY.md). Do not show that file to the defender or the challenger.
+   - **Verdicts:** keep the fix as the row gives it; change the fix, with how; or drop the fix and leave the smell with a comment saying why. Each verdict gives the costs it compared, and says whether the numbers or the judge's own knowledge decided it.
    - **Working doc:** the change itself. Keep the debate folder outside the repo, so nothing from it lands in the change.
    - **Apply:** the fixes above, the contested matches as their verdicts say.
 
@@ -126,10 +128,6 @@ These go under Fixes and Questions in the Output form.
 **Someone else's change.** Do not edit their code. Report each match in the Output form: one entry per match, with the lines that show it, as a finding or a question. The Output section says what an entry needs. A smell left in with no comment saying why is a match like any other.
 
 Done when, for your own change, every notable cut and behavior change is under Fixes and every open question is under Questions. For someone else's, every match from step 4 is in the report once.
-
-## The smells
-
-The table of smells is in [SMELLS.md](SMELLS.md). Open it at step 3. "The table" and "its row" in the steps mean that file.
 
 ## Output
 
