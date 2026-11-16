@@ -33,14 +33,27 @@ If a PR number was passed, use it. Otherwise:
 gh pr view --json number,headRefName -q '{number: .number, branch: .headRefName}'
 ```
 
-### 2. Wait for checks before reading anything
+### 2. Wait for checks, and act on what arrives
 
-Review bot comments (Greptile, T-Rex) only exist once their checks finish. If any check is
-`PENDING` or `IN_PROGRESS`, wait first:
+Review bot comments (Greptile, T-Rex) only exist once their checks finish. Wait with
+[references/wait-for-ci.sh](references/wait-for-ci.sh), run in the background:
 
 ```bash
-gh pr checks <PR> --watch
+references/wait-for-ci.sh <PR> <since>
 ```
+
+For the first run, `<since>` is the PR's creation time
+(`gh pr view <PR> --json createdAt -q .createdAt`). After that it is the `next-since` the
+script printed last, or the time recorded just before a push (`date -u +%FT%TZ`).
+
+It returns as soon as there is something to act on, so you work on feedback while the
+other checks run:
+
+- **Exit 4**: a check failed, or a review or comment arrived from Greptile, T-Rex / G-Rex,
+  or a person, and other checks are still running. Start steps 3–8 on what it printed,
+  then run it again with the printed `next-since`.
+- **Exit 0**: no check is pending. Continue with step 3.
+- **Exit 3**: checks were still running after 45 minutes. Report which.
 
 ### 3. Fetch PR state
 
@@ -136,7 +149,8 @@ git commit -m "fix: address review feedback (iteration N)"
 git push
 ```
 
-b. Wait for checks again: `gh pr checks <PR> --watch`
+b. Wait for checks again as in step 2, with the time recorded just before the push as
+`<since>`.
 
 c. Re-run steps 4–8 against the new results — new Greptile comments, new T-Rex failures,
 CI failures, remaining unresolved threads.
@@ -162,18 +176,19 @@ gh pr view <PR> --json headRefOid -q .headRefOid
 gh pr comment <PR> --body '[greptile](greptile) run an apex review'
 ```
 
-Record the request time (`date -u +%FT%TZ`) and wait with
-[references/wait-for-greptile.sh](references/wait-for-greptile.sh), run in the background:
+Record the request time (`date -u +%FT%TZ`) and wait as in step 2, also requiring a
+Greptile response after that time:
 
 ```bash
-references/wait-for-greptile.sh <PR> <request-time> 45 15
+references/wait-for-ci.sh <PR> <request-time> --greptile-since <request-time>
 ```
 
-It counts any Greptile response after that time: a check run (waited on until it
-completes), a review, an inline comment, or an edit to an existing comment. Greptile
-updates its summary comment in place, so watching only for new comments misses a
-finished review. Exit 2 means nothing started within the grace period: report that
-Apex did not start instead of waiting longer. Existing green checks or an older
+With `--greptile-since` it counts any Greptile response after that time: a check run
+(waited on until it completes), a review, an inline comment, or an edit to an existing
+comment. Greptile updates its summary comment in place, so watching only for new comments
+misses a finished review. Exit 2 means nothing started within the 15-minute grace period:
+report that Apex did not start instead of waiting longer. On exit 4, keep the same
+`--greptile-since` when you run it again. Existing green checks or an older
 Greptile review do not establish completion; verify that the new review follows this
 request and covers the recorded head SHA. Read its review body, inline comments, and
 follow-up comments, including "Comments Outside Diff", using steps 4–8.
