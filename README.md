@@ -12,17 +12,13 @@ Felix's agent skills for Claude Code, Codex, OpenCode, and any other harness tha
 ## Install
 
 ```bash
-git clone git@github.com:fvcci/skills.git ~/Code/skills
+git clone https://github.com/fvcci/skills.git ~/Code/skills
 ~/Code/skills/install.sh
 ```
 
 Skills are symlinked, so editing a file in `skills/` changes it in every harness at once.
 
-In a cloud machine or sandbox (Codex cloud, Claude Code on the web, a dev VM), put the same two commands in the environment's setup script. The repo is private, so clone with a GitHub token:
-
-```bash
-git clone https://x-access-token:$GITHUB_TOKEN@github.com/fvcci/skills.git ~/skills && ~/skills/install.sh
-```
+In a cloud machine or sandbox (Codex cloud, Claude Code on the web, a dev VM), put the same two commands in the environment's setup script.
 
 To install only the skills in `skills/`, without cloning: `npx skills add fvcci/skills --global --yes --agent claude-code codex opencode`.
 
@@ -45,3 +41,9 @@ To install only the skills in `skills/`, without cloning: `npx skills add fvcci/
 3. Run `./check.py --local`.
 
 To remove one, delete it here, then delete its links in `~/.claude/skills` and `~/.agents/skills` (`npx skills remove -g <name>` for third-party skills).
+
+## License
+
+MIT, see [LICENSE](LICENSE).
+
+The smell wording in `skills/sniff/SMELLS.md` is adapted from the `code-review` skill in [mattpocock/skills](https://github.com/mattpocock/skills), which is MIT licensed, Copyright (c) 2026 Matt Pocock.

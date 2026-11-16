@@ -3,9 +3,7 @@
 When asked to install or set up these skills, do the following and report the result.
 
 1. **Get the repo.** If you are not already inside a clone, clone it to `~/Code/skills`:
-   `git clone git@github.com:fvcci/skills.git ~/Code/skills`.
-   The repo is private. If SSH fails and `GITHUB_TOKEN` is set, use
-   `https://x-access-token:$GITHUB_TOKEN@github.com/fvcci/skills.git`. If neither works, ask the user to run `gh auth login`.
+   `git clone https://github.com/fvcci/skills.git ~/Code/skills`.
 2. **Check prerequisites:** `git`, `python3`, and `node` (for `npx`). Install any that are missing with the system package manager, or ask the user.
 3. **Install:** run `./install.sh` from the repo root. It:
    - symlinks each `skills/<name>` into `~/.claude/skills` and `~/.agents/skills`;
