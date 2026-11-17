@@ -9,7 +9,7 @@ import argparse, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent
 SKILLS = ROOT / "skills"
-THIRD_PARTY = ROOT / "third-party"
+VENDOR = ROOT / "vendor"
 HOME = pathlib.Path.home()
 NAME = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 HARNESS_PATH = re.compile(r"~/\.(claude|codex|agents)/skills|/Users/[^/\s]+/\.(claude|codex|agents)/skills")
@@ -60,9 +60,9 @@ def own_skills():
     return sorted(p for p in SKILLS.iterdir() if p.is_dir() and not p.name.startswith("."))
 
 
-def third_party():
+def vendored():
     names = {}
-    for line in (ROOT / "third-party.txt").read_text().splitlines():
+    for line in (ROOT / "vendor.txt").read_text().splitlines():
         if line.strip() and not line.startswith("#"):
             source, *skills = line.split()
             names.update({s: source for s in skills})
@@ -107,17 +107,17 @@ def check_repo():
         if manual_codex and not manual_claude:
             errors.append(f"{d.name}: agents/openai.yaml disables implicit invocation, so SKILL.md needs disable-model-invocation: true")
 
-    for name in third_party():
+    for name in vendored():
         if (SKILLS / name).exists():
-            errors.append(f"{name}: listed in third-party.txt and also in skills/")
+            errors.append(f"{name}: listed in vendor.txt and also in skills/")
 
-    # third-party/ holds the copies Devin loads. It must match the list, and each copy must still load.
-    copies = {p.name: p for p in THIRD_PARTY.iterdir() if p.is_dir()} if THIRD_PARTY.is_dir() else {}
-    for name in sorted(set(third_party()) - set(copies)):
-        errors.append(f"{name}: listed in third-party.txt but not copied into third-party/; run ./vendor.py {name}")
+    # vendor/ holds the copies Devin loads. It must match the list, and each copy must still load.
+    copies = {p.name: p for p in VENDOR.iterdir() if p.is_dir()} if VENDOR.is_dir() else {}
+    for name in sorted(set(vendored()) - set(copies)):
+        errors.append(f"{name}: listed in vendor.txt but not copied into vendor/; run ./vendor.py {name}")
     for name, d in sorted(copies.items()):
-        if name not in third_party():
-            errors.append(f"{name}: in third-party/ but not listed in third-party.txt")
+        if name not in vendored():
+            errors.append(f"{name}: in vendor/ but not listed in vendor.txt")
         for key in unquoted_colons(d / "SKILL.md"):
             errors.append(f"{name}: upstream frontmatter '{key}' holds ': ' unquoted, which strict YAML parsers reject")
 
@@ -129,7 +129,7 @@ def installed(folder):
 
 
 def check_local():
-    tracked = {p.name: p for p in own_skills()} | {name: THIRD_PARTY / name for name in third_party()}
+    tracked = {p.name: p for p in own_skills()} | {name: VENDOR / name for name in vendored()}
     claude = installed(HOME / ".claude/skills")
     agents = installed(HOME / ".agents/skills")
     codex = installed(HOME / ".codex/skills")
@@ -141,7 +141,7 @@ def check_local():
                 errors.append(f"{name}: not linked from {label}; run ./install.sh")
     for label, folder in (("~/.claude/skills", claude), ("~/.agents/skills", agents), ("~/.codex/skills", codex)):
         for name in sorted(set(folder) - set(tracked)):
-            errors.append(f"{name}: installed in {label} but not in this repo or third-party.txt; add it or remove it")
+            errors.append(f"{name}: installed in {label} but not in this repo or vendor.txt; add it or remove it")
     # Codex loads both ~/.codex/skills and ~/.agents/skills, so a name in both shows up twice.
     for name in sorted(set(codex) & set(agents)):
         errors.append(f"{name}: in both ~/.codex/skills and ~/.agents/skills; Codex loads it twice")
@@ -151,7 +151,7 @@ def check_project(root):
     project = set()
     for sub in (".agents/skills", ".claude/skills", ".codex/skills"):
         project |= set(installed(pathlib.Path(root) / sub))
-    for name in sorted(project & ({p.name for p in own_skills()} | set(third_party()))):
+    for name in sorted(project & ({p.name for p in own_skills()} | set(vendored()))):
         errors.append(f"{name}: also a skill in {root}; inside that repo two skills share this name")
 
 

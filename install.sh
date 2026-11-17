@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Install every skill in this repo for Claude Code, Codex, OpenCode and other harnesses.
-#   ./install.sh    link every skill in skills/ and third-party/
+#   ./install.sh    link every skill in skills/ and vendor/
 #
 # Skills are symlinked, so editing them here updates every harness at once:
 #   ~/.agents/skills  read by Codex, OpenCode, Copilot, Zed, ...
@@ -27,10 +27,10 @@ link() {
 }
 
 failed=0
-for dir in "$repo"/skills/*/ "$repo"/third-party/*/; do
+for dir in "$repo"/skills/*/ "$repo"/vendor/*/; do
   name="$(basename "$dir")"
   link "${dir%/}" "$HOME/.agents/skills/$name" || failed=1
   link "${dir%/}" "$HOME/.claude/skills/$name" || failed=1
 done
-echo "linked skills from $repo/skills and $repo/third-party"
+echo "linked skills from $repo/skills and $repo/vendor"
 exit "$failed"

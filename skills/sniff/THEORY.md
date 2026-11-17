@@ -23,7 +23,7 @@ Reading and reach come from two causes. Each cause gives you one job, placement 
 
 1. **A design is a trade-off, decided on what you know now.** Every boundary makes one kind of change cheap and another expensive. Event-driven, onion, hexagonal and clean architecture and domain-driven design each draw the boundaries a different way, and none is right everywhere. The work is knowing which one fits the current context. The module's context decides. Nobody knows the future, human or agent. So decide from today's facts. Only a choice that is hard to reverse is a real bet.
 2. **A smell is a hint, and its fix is a trade-off too.** A smell marks a place to look, and the context decides whether there is a problem. A fix sets a boundary: extracting, inlining, splitting and merging all move where things sit. So a fix can remove one smell and create another, and the two have to be weighed against each other.
-3. **Start small and expand when needed.** Keep code next to the one place that uses it, and keep things that change together in one place. Do this even when you expect reuse. Two call sites is a coincidence; three is a pattern. Duplicate until then, and move something into its own function or file at the third use. Before that, a separate piece is a guess about the future that costs reading today.
+3. **Start small and expand when needed.** Keep code next to the one place that uses it, and keep things that change together in one place. Do this even when you expect reuse.
 4. **Simple means simple for the caller.** A deep module gives callers a lot of behavior for little to learn. Its inside may be complex.
 5. **Change rate draws the boundaries.** Things that change together sit together. Stable things sit apart.
 
@@ -80,4 +80,3 @@ This document is the hub. The skills below repeat parts of it on purpose, each f
 - Martin Fowler: the definition of a smell, from his "Code Smell" article, and twelve of the smells, from *Refactoring*, as used in Pocock's review skill.
 - Robert C. Martin, *Clean Architecture*: abstract and concrete.
 - Adam Tornhill, *Your Code as a Crime Scene*: files that change together.
-- Sandi Metz: duplication is cheaper than the wrong abstraction.

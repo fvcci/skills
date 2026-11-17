@@ -10,11 +10,8 @@ Cut:
 - Defensive checks for states the type system or caller already rules out.
 - Exports nothing imports.
 - A new function, type, or file with one user.
-- A new field, option, parameter, or flag that nothing in this change reads. Say "unused in this change", not "unused in the repo".
+- A new field, option, parameter, or flag that nothing reads. Check the repo, not only the change.
 - A check, default, or fallback for a case nothing shown produces.
-
-Two call sites is a coincidence; three is a pattern. Duplicate until then —
-inline duplication is cheaper to read and delete than the wrong abstraction.
 
 Before cutting a piece with one user, apply the deletion test from
 `codebase-design`: imagine it deleted. If the complexity vanishes, it was a

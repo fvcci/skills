@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Copy the skills listed in third-party.txt from their upstream repos into third-party/.
+"""Copy the skills listed in vendor.txt from their upstream repos into vendor/.
 
   ./vendor.py              refresh every skill
   ./vendor.py tdd handoff  refresh only these
@@ -9,18 +9,18 @@ Each copy keeps its upstream licence file. Review the diff before committing: it
 import pathlib, re, shutil, subprocess, sys, tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parent
-DEST = ROOT / "third-party"
+DEST = ROOT / "vendor"
 
 
 def sources():
-    for line in (ROOT / "third-party.txt").read_text().splitlines():
+    for line in (ROOT / "vendor.txt").read_text().splitlines():
         if line.strip() and not line.startswith("#"):
             source, *skills = line.split()
             yield source, skills
 
 
 def parse(source):
-    """A third-party.txt source as (clone URL, ref, path inside the repo)."""
+    """A vendor.txt source as (clone URL, ref, path inside the repo)."""
     m = re.match(r"https://github\.com/([^/]+/[^/]+)/tree/([^/]+)/?(.*)$", source)
     if m:
         return f"https://github.com/{m.group(1)}.git", m.group(2), m.group(3)

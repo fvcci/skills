@@ -40,6 +40,15 @@ Derived from ~50 meals he picked himself (Aug–Nov 2026). Per-restaurant pick/s
 - **Look up menus at the delivery time.** Pass `scheduled_delivery_time` (lunch about 12:30pm PT, dinner about 6pm PT, in UTC) to `doordash_get_restaurant_menu` and `doordash_get_food_item`. Dinner-only items don't show up otherwise, and `menu_id` can differ between lunch and dinner.
 - **An `ITEM_UNAVAILABLE` / `item_hours` error** means that menu isn't live yet. Retry after the store opens or closer to the meal; if it still fails, pick a backup and say so.
 
+## New restaurants: Felix picks the dish
+
+A restaurant is new when it appears nowhere in [restaurants.md](restaurants.md). For every slot with a new restaurant:
+
+1. Fill the slot with your best pick from the other carts, so it has a meal at checkout.
+2. Open the summary with a **New restaurants** section. For each one, give the slot (day, lunch or dinner, checkout time), cuisine, a review summary with sources, and 3 to 5 dishes that fit his preferences, each with its price, photo, and one line on why.
+3. Ask him to pick a dish there or keep your pick. Use `AskUserQuestion` when it's available, one question per new restaurant, with your pick as the last option.
+4. When he picks a dish, swap it in for your pick and add its side the usual way. Then record the restaurant in [restaurants.md](restaurants.md): under "Picked once" with his dish, or under "Offered once and skipped".
+
 ## Research and report
 
 - Look up each pick on review sites (The Infatuation, Yelp, Google reviews, Eater, SF Chronicle) for both the restaurant and the specific dish before choosing. Cite the sources you used.

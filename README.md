@@ -5,9 +5,9 @@ Felix's agent skills for Claude Code, Codex, OpenCode, and any other harness tha
 ## Layout
 
 - `skills/<name>/SKILL.md`: skills written here. Each one is a single folder used by every harness, so a Claude skill always has its Codex counterpart.
-- `third-party.txt`: skills written by other people, and the upstream repo each comes from.
-- `third-party/`: the one copy of each of those skills, refreshed from upstream by `./vendor.py`.
-- `install.sh`: links `skills/*` and `third-party/*` into `~/.claude/skills` (Claude Code) and `~/.agents/skills` (Codex, OpenCode, Copilot, Zed, Devin).
+- `vendor.txt`: skills written by other people, and the upstream repo each comes from.
+- `vendor/`: the one copy of each of those skills, refreshed from upstream by `./vendor.py`.
+- `install.sh`: links `skills/*` and `vendor/*` into `~/.claude/skills` (Claude Code) and `~/.agents/skills` (Codex, OpenCode, Copilot, Zed, Devin).
 - `check.py`: fails when a skill would load differently between harnesses.
 - `.devin-plugin/plugin.json`: makes the repo a Devin plugin named `fvcci`.
 - `skills/AGENTS.md`: the rules for an agent editing skills. It sits below the repo root on purpose: Devin injects a root `AGENTS.md` into every session of anyone who has the plugin.
@@ -31,7 +31,7 @@ An agent asked to install or set up these skills does the following and reports 
    `git clone https://github.com/fvcci/skills.git ~/Code/skills`.
 2. **Check prerequisites:** `git` and `python3`. Install any that are missing with the system package manager, or ask the user.
 3. **Install:** run `./install.sh` from the repo root. It:
-   - symlinks each `skills/<name>` and `third-party/<name>` into `~/.claude/skills` and `~/.agents/skills`;
+   - symlinks each `skills/<name>` and `vendor/<name>` into `~/.claude/skills` and `~/.agents/skills`;
    - moves any existing folder with the same name into `~/.skills-backup/<timestamp>/` first.
 4. **Handle failures.** If `install.sh` prints `could not move ... sudo rm -rf '<path>'`, that folder belongs to another user. Give the user that exact command to run, then rerun `./install.sh`. Do not run `sudo` yourself.
 5. **Remove duplicates.** Codex loads both `~/.codex/skills` and `~/.agents/skills`. If `./check.py --local` reports a name in both, delete the copy in `~/.codex/skills` (never touch `~/.codex/skills/.system`).
@@ -59,8 +59,8 @@ To install the skills with the `skills` tool: `npx skills add fvcci/skills --glo
 - Claude's `disable-model-invocation: true` and Codex's `agents/openai.yaml` `policy.allow_implicit_invocation: false` appear together or not at all.
 - Every relative link in a skill's markdown points at a file that exists.
 - No frontmatter value holds `: ` unquoted. Lenient loaders accept it, and a strict YAML parser drops the skill.
-- A skill is in `skills/` or `third-party.txt`, never both.
-- `third-party/` holds exactly the skills `third-party.txt` lists.
+- A skill is in `skills/` or `vendor.txt`, never both.
+- `vendor/` holds exactly the skills `vendor.txt` lists.
 
 `./check.py --local` also compares against this machine. It reports skills installed but not tracked here, tracked skills that are not linked to this repo, and names in both `~/.codex/skills` and `~/.agents/skills`, which Codex loads twice.
 
@@ -68,14 +68,14 @@ To install the skills with the `skills` tool: `npx skills add fvcci/skills --glo
 
 ## Adding or removing a skill
 
-1. Add `skills/<name>/SKILL.md`, or a line in `third-party.txt` followed by `./vendor.py <name>`.
+1. Add `skills/<name>/SKILL.md`, or a line in `vendor.txt` followed by `./vendor.py <name>`.
 2. Run `./install.sh`.
 3. Run `./check.py --local`.
 
-To remove one, delete it here (for a third-party skill, its line and its folder in `third-party/`), then delete its links in `~/.claude/skills` and `~/.agents/skills`.
+To remove one, delete it here (for a vendored skill, its line and its folder in `vendor/`), then delete its links in `~/.claude/skills` and `~/.agents/skills`.
 
 ## License
 
-MIT, see [LICENSE](LICENSE). The skills under `third-party/` belong to their authors and keep their own licences: each folder carries its upstream licence file.
+MIT, see [LICENSE](LICENSE). The skills under `vendor/` belong to their authors and keep their own licences: each folder carries its upstream licence file.
 
-The smell wording in `skills/sniff/SMELLS.md` is adapted from the `code-review` skill in [mattpocock/skills](https://github.com/mattpocock/skills), which is MIT licensed, Copyright (c) 2026 Matt Pocock.
+The smell wording in `skills/sniff/SMELLS.md` is adapted from the `code-review` skill in [mattpocock/skills](https://github.com/mattpocock/skills), which is MIT licensed, Copyright (c) 2026 Matt Pocock. Its test smells Test Guards Nothing, Duplicate Test and Test-Only Production Code are adapted from the `prune-tests` skill in [caldoai/skills](https://github.com/caldoai/skills), which is MIT licensed, Copyright (c) 2026 Maze.
