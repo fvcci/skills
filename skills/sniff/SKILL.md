@@ -66,14 +66,14 @@ This step asks only whether the match is correct. What the smell costs, and whet
 
 Rule on every match yourself first, and fill in its `ruling` and `evidence` on the walk list. Then each match gets a second check. Its smell's row gives the tier, and the "Check effort" table in [SMELLS.md](SMELLS.md) says what each tier's check is: a shared agent, its own agent, or a debate with the `debate` skill.
 
-In fast mode a match moves up one tier when your own ruling rests on a fact you could not check. In max mode every match gets the high tier, whatever its row says. Fill in each match's `check` with the tier it ends on.
+In both modes a match moves up one tier when your own ruling rests on a fact you could not check. In max mode every second check then runs one effort level above what the table gives, on the ladder low < medium < high < xhigh < max: medium becomes high and high becomes xhigh, for each agent and for the debate's challenger and judge. Fill in each match's `check` with the tier it ends on.
 
-Run every check in parallel. Each agent is a frontier model on the other family from yours, at the effort the table gives. Give it the change, the walk-list entries it covers, and this step. It re-examines its matches against the code, and its ruling stands: write it over your own.
+Run every check in parallel. Each agent is a frontier model on the other family from yours, at the effort the table gives, or one level above it in max mode. Give it the change, the walk-list entries it covers, and this step. It re-examines its matches against the code, and its ruling stands: write it over your own.
 
 The mode sets the debates:
 
 - **Fast:** one debate for all the high matches. It runs one round, then the judge rules on what is still open.
-- **Max:** one debate for each item that has a match, each in its own subfolder, with the `debate` skill's full rounds.
+- **Max:** one debate for all the high matches, as in fast mode, but with the `debate` skill's full rounds.
 
 Give each debate this brief:
 
@@ -98,7 +98,7 @@ Rules for every fix:
 - **Look it up first.** Read online the documentation and best practices of the language, library or tool the code uses, for the version in use. Build the fix the way they recommend.
 - **Fit the fix to the code.** The row's usual fix is a starting point. When several matches sit on the same code, choose one fix that answers all of them.
 - **Leave a smell only when every fix creates one.** Each row names the smells its fix tends to cause, under "Smells the fix can create". A type, an extraction or a layer with one user is such a smell. Say which smell the fix would create.
-- **Comment what stays.** Add one line at the code saying why. The reason names a present need: what the user decided, a constraint, or a caller.
+- **Record why a smell stays, and comment only a constraint.** The reason names a present need: what the user decided, a constraint, or a caller. Add a line at the code only when the reason is a constraint a later editor would otherwise undo, so the comment passes Comment Says What itself; a comment for every smell left in fills the code with comments the repo would delete.
 - **Record it.** Write the fix made, or why the smell stays, in the match's `fix` field on the walk list.
 
 The two modes differ in who decides each fix. Run one of them, never both.
@@ -110,10 +110,10 @@ The default. You decide each fix yourself, then another model checks what the fi
 1. Read [THEORY.md](THEORY.md).
 2. Decide the fix for each real match yourself, and make it. Your first decision stands: nobody reviews the choice of fix. Where more than one fix fits, or a fix would create another smell, grade the options as "How to grade code quality" in THEORY.md describes, leaving the smell among them, and take the one with the higher grade.
 3. Hand the second pass to a fresh agent, so it is read by eyes that did not write the fixes. Write a handoff document as the `handoff` skill describes, in the OS temp directory: the walk list, and the names, constructs and places the user gave, from step 1. Start an agent on the other model family from yours, at the same capability tier and effort level, and give it the document and this skill, THEORY.md included.
-4. That agent loops once more over the lines the fixes touched, starting with the smells each fixed row names under "Smells the fix can create". It fixes what the second pass finds. When two fixes undo each other, it grades both versions as THEORY.md describes, keeps the one with the higher grade, and says why in a comment.
+4. That agent loops once more over the lines the fixes touched, starting with the smells each fixed row names under "Smells the fix can create". It fixes what the second pass finds. When two fixes undo each other, it grades both versions as THEORY.md describes, keeps the one with the higher grade, and writes why in the match's `fix`.
 5. Verify behavior is unchanged apart from the changes you report — run the tests, typecheck, or lint the file.
 
-Done when every real match is fixed or left with a comment saying why, and the second pass finds no new match.
+Done when every real match is fixed or left with its reason in `fix`, and the second pass finds no new match.
 
 #### Max mode
 
@@ -127,14 +127,14 @@ Only when the user says "max". A debate decides which fix each real match gets, 
    - **Sides:** the defender makes the proposal and stands by it. The challenger reviews it and always argues for the lower cost: it names the smells the fix would create, taken from [SMELLS.md](SMELLS.md), and says how the fix should change to leave less reading, reach and risk. Its hard line, when no change saves the fix, is to drop it. Against a proposal to leave, it argues that the smell should be fixed, and how. Its pressure is there to make the decision sound, so the defender answers each point with evidence from the code.
    - **Read first:** the defender and the challenger read [SMELLS.md](SMELLS.md), for the terms and each smell's cost shares. The judge reads it too, and [THEORY.md](THEORY.md).
    - **The test**, for the judge only: the section "How to grade code quality" in [THEORY.md](THEORY.md). Do not show that file to the defender or the challenger.
-   - **Verdicts:** keep the fix as proposed; change the fix, with how; or leave the smell with a comment saying why. Each verdict gives the costs it compared, and says whether the numbers or the judge's own knowledge decided it.
+   - **Verdicts:** keep the fix as proposed; change the fix, with how; or leave the smell, with the reason. Each verdict gives the costs it compared, and says whether the numbers or the judge's own knowledge decided it.
    - **Working doc:** the change itself. Keep the debate folder outside the repo, so nothing from it lands in the change.
    - **Apply:** step 3 below.
 
 3. Make the fixes as the verdicts say.
 4. Verify behavior is unchanged apart from the changes you report — run the tests, typecheck, or lint the file.
 
-Done when the debate has a verdict for every item, and every real match is fixed or left with a comment saying why.
+Done when the debate has a verdict for every item, and every real match is fixed or left with its reason in `fix`.
 
 ### 6. Report
 
