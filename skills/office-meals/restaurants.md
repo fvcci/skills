@@ -13,7 +13,7 @@ Last updated: 2026-11-02. Covers 2026-08-18 to 2026-11-04.
 | Bamboo Restaurant | 2/2 | Peking Duck; Asparagus Salmon in Black Bean Sauce + rice + shrimp noodle rolls |
 | Dabao Singapore | 2/2 | Nasi Lemak + curry puff; Char Kway Teow |
 | Ollei Korean | 2/2 | Bibimbap; Galbitang (short rib soup) |
-| Sanppo | 2/2 | Tempura Bento (2 items); Combo Bento (3 items) |
+| Sanppo | 3/3 | Tempura Bento (2 items); Combo Bento (3 items) twice. Nov 19 bento: salmon sashimi + salmon teriyaki + Grilled Salmon Skin Roll. He disliked the roll (dry); never order the Grilled Salmon Skin Roll again. |
 | Pacific Catch | 2/2 | West Coast Salmon (twice) |
 | China Live | 2/2 | Yangzhou Fried Rice; Bian Dang box lunch (Kung Pao) |
 | Son & Garden | 3/5 | Farmhouse Omelet; Salmon Curry; Crabby Omelet |
@@ -51,12 +51,15 @@ Last updated: 2026-11-02. Covers 2026-08-18 to 2026-11-04.
 | The Grove | 1/1 | Grilled Cheese + cup of soup |
 | Gott's Roadside | 1/3 | Vietnamese Chicken Salad |
 | Tender Greens | 2/4 | Grilled steak plate; short rib |
+| Sohunan | 1/2 | #10 Smoked Pork Belly (Nov 18). He disliked it; never order that dish again. |
+| Al Pastor Papi | 1/1 | Alpastorta + chips & salsa, asked for pickled jalapeños (Nov 20) |
 
 ## Fallback only
 
 | Restaurant | Picked | Notes |
 |---|---|---|
-| MIXT Salads | 3/~25 | Bachelor Salad ×2, Soba Salad. He only picked it against weak alternatives (NomNom Burger, KRUA Thai, taco shops). It's in nearly every slot; treat it as the last resort. |
+| MIXT Salads | 4/~26 | Bachelor Salad ×2, Soba Salad; Nov 20 Design Your Own Salad (arugula, cherry tomatoes, roasted cauliflower + broccoli + delicata squash, spicy pickled shimeji, steak, fennel, quinoa, parsley + chives + tarragon, parmesan, balsamic + red chimichurri) over Aliment's starters-only under-$30 menu and Sumac. He only picks it against weak alternatives. It's in nearly every slot; treat it as the last resort, but Design Your Own Salad lets him load roasted vegetables. |
+| Aliment | 0/2 | Nov 20: his mussels + bread was a starter, not a main; every under-$30 main is a burger, sandwich, or vegetarian. Full mains (salmon, pork chop) are $37+. |
 
 ## Never picked: avoid
 
@@ -79,7 +82,8 @@ Last updated: 2026-11-02. Covers 2026-08-18 to 2026-11-04.
 | Fanoos | 2× |
 | Locali | 2× |
 | North Beach Pizza | 2× |
-| Offered once and skipped | Mendocino Farms, Proper Food, Pad Pad Thai, Sababa, Sumac, Hummus Mediterranean, Gyros on Wheels, Marcela's, Underdogs, Taco Cantina, NomNom Burger, KRUA Thai, Sohunan, Duk Hing, Saru Handroll, Hawaiian Poke Bowl, Chalos, Aliment, Ayola, Jane |
+| Offered once and skipped | Mendocino Farms, Proper Food, Pad Pad Thai, Sababa, Hummus Mediterranean, Gyros on Wheels, Marcela's, Underdogs, Taco Cantina, NomNom Burger, KRUA Thai, Duk Hing, Saru Handroll, Hawaiian Poke Bowl, Chalos, Ayola, Jane |
+| Offered twice and skipped | Sumac (Nov 20: salmon rice bowl was the best fit; strong delivery ratings) |
 
 ## Outside the office
 

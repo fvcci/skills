@@ -29,7 +29,7 @@ Derived from ~50 meals he picked himself (Aug–Nov 2026). Per-restaurant pick/s
 - **Lunch can be brunch-style:** omelets at Son & Garden, a soft-scramble tartine with tomato bisque at Tartine.
 - **Sandwich style:** banh mi and tartines beat deli sandwiches. He disliked the focaccia sandwiches (Golden Focaccia) even though he ordered them twice; don't pick focaccia sandwiches.
 - **Combos beat single items:** he picks two-item BBQ plates, multi-item bentos and box lunches.
-- **Spend leftover budget on a side** when the main leaves room under the limit. He usually adds miso soup, chicken corn soup, spring rolls, curry puffs, or guacamole. Chinese entrées usually don't include rice; add steamed rice.
+- **Spend leftover budget on a side** when the main leaves room under the limit. Pick the main first and never downgrade it to fit a side. If the restaurant has miso soup and it fits, add miso soup; he likes it. Otherwise he usually adds chicken corn soup, spring rolls, curry puffs, or guacamole. Chinese entrées usually don't include rice; add steamed rice.
 - **Noodle soups are fine for delivery**; don't skip them because of the broth.
 - **Every lunch and dinner slot gets a meal.** Never leave a slot empty. When every cart is weak, pick the best of them and say why.
 
