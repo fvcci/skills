@@ -14,7 +14,8 @@
 #   - a Greptile review, inline comment, or comment that was created OR edited
 #     (Greptile edits its summary in place)
 #   - a "Generated Tests" comment (T-Rex / G-Rex)
-#   - a review or comment from a person other than the gh user
+#   - a review or comment from a person; the gh user's own count unless they end
+#     with <!-- agent -->, because agents post under that login
 # Exit codes: 0 no check is pending (and Greptile responded, when required)
 #             4 activity arrived while other checks still run: act on it, then run again
 #               with the printed next-since
@@ -43,7 +44,10 @@ if [ -n "$greptile_since" ]; then greptile_start=$(epoch "$greptile_since") || e
 is_greptile='test("(?i)greptile")'
 who="(if (.user.login|$is_greptile) then \"greptile\" else \"other\" end)"
 # Greptile, the generated-test bots, and people. Other bots (Vercel and the like) are informational.
-can_act="((.user.login|$is_greptile) or ((.body // \"\")|test(\"Generated Tests\")) or (.user.type == \"User\" and .user.login != \"$me\"))"
+# Agents post as the gh user, so that login's comments count unless an agent marked them.
+# Its empty-bodied reviews only wrap inline comments, which the inline query reports.
+agent_wrote="((.body // \"\") as \$b | \$b == \"\" or (\$b | test(\"<!-- agent -->|run an apex review\")))"
+can_act="((.user.login|$is_greptile) or ((.body // \"\")|test(\"Generated Tests\")) or (.user.type == \"User\" and ((.user.login == \"$me\" and $agent_wrote) | not)))"
 
 query() { # retry transient API failures instead of treating them as "no activity"
   local out

@@ -139,6 +139,11 @@ Resolve threads that were fixed or deemed informational, using the mutation in
 mutation with aliases (`t1`, `t2`, …).
 Leave threads with an undecided conflict unresolved.
 
+End every comment or reply you post on the PR with `<!-- agent -->` on its own line,
+except the Apex request in step 10. Agents post under the user's login, and
+`wait-for-ci.sh` treats an unmarked comment from that login as the user's own and stops
+on it.
+
 ### 9. Loop — commit, push, re-check (max 5 iterations)
 
 a. Commit and push the fixes:
