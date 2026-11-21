@@ -6,7 +6,7 @@ Felix's agent skills for Claude Code, Codex, OpenCode, and any other harness tha
 
 - `skills/<name>/SKILL.md`: skills written here. Each one is a single folder used by every harness, so a Claude skill always has its Codex counterpart.
 - `vendor.txt`: skills written by other people, and the upstream repo each comes from.
-- `vendor/`: the one copy of each of those skills, refreshed from upstream by `./vendor.py`.
+- `vendor/`: the one copy of each of those skills. Edit it in place; `./vendor.py` merges upstream changes into your edits.
 - `install.sh`: links `skills/*` and `vendor/*` into `~/.claude/skills` (Claude Code) and `~/.agents/skills` (Codex, OpenCode, Copilot, Zed, Devin).
 - `check.py`: fails when a skill would load differently between harnesses.
 - `.devin-plugin/plugin.json`: makes the repo a Devin plugin named `fvcci`.

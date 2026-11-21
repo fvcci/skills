@@ -1,9 +1,10 @@
 # Skills written by other people. install.sh installs them from upstream with `npx skills add`.
-# Format: <source> <skill> [<skill> ...]. A tree URL with a commit SHA pins a version.
-github/gh-stack gh-stack
-clickhouse/agent-skills clickhouse-best-practices clickhouse-architecture-advisor
-DietrichGebert/ponytail ponytail
-mattpocock/skills tdd grilling teach grill-me grill-with-docs handoff codebase-design writing-for-agents
-https://github.com/cursor/plugins/tree/main/cursor-team-kit fix-ci get-pr-comments
-https://github.com/cursor/plugins/tree/main/pstack unslop
-https://github.com/google-gemini/gemini-cli/tree/main/.gemini/skills pr-creator
+# Format: <source>@<commit> <skill> [<skill> ...]. The commit is the upstream version the copies in vendor/ started from; ./vendor.py merges later upstream changes into your edits and moves it.
+# A tree URL whose ref is a commit SHA (no @) is your own pin and ./vendor.py never moves it.
+github/gh-stack@80b6d6e910cc1b7eaa26b961d7721ade21084fed gh-stack
+clickhouse/agent-skills@1008fd74c0912e2f4819d52324af8a2fac2b74c1 clickhouse-best-practices clickhouse-architecture-advisor
+DietrichGebert/ponytail@96608e078b2d5ea607c5c3b8b5a54d1c1fba6846 ponytail
+mattpocock/skills@abeeaf95660ba9e8b7c753eb38f441ca707a8823 tdd grilling teach grill-me grill-with-docs handoff codebase-design writing-for-agents
+https://github.com/cursor/plugins/tree/main/cursor-team-kit@792440e8a560a4a3f63748cdee70491ecd412982 fix-ci get-pr-comments
+https://github.com/cursor/plugins/tree/main/pstack@792440e8a560a4a3f63748cdee70491ecd412982 unslop
+https://github.com/google-gemini/gemini-cli/tree/main/.gemini/skills@eecccfcd5aff25de5e78135ca20f7abe3f566955 pr-creator
