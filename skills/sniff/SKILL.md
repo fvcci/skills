@@ -27,7 +27,7 @@ Done when every hunk the change wrote belongs to an item on the walk list.
 
 ### 3. Loop over the smells
 
-Open [SMELLS.md](SMELLS.md). Take the smells one at a time, in table order. For each one:
+Open [SMELLS.md](SMELLS.md) and split its table into eight slices of consecutive rows. Start one agent per slice, all at once, at your model and effort, so the loop takes as long as one slice instead of the whole table. Give each agent the walk list's path, its rows and this step, and have it write to its own copy of the walk list, since agents writing one file overwrite each other. Each agent takes its smells one at a time, in table order. For each one:
 
 1. Read its row. When its name is a link, open that file now, not before. When its last cell says yes, load `codebase-design`.
 2. Go through every item on the walk list, looking for that one smell and nothing else. **Read** beyond the change when the row needs it, such as for another copy or a feature the codebase already has. In test code, look only for the smells marked for it.
@@ -42,6 +42,8 @@ Skip only these kinds of code:
 - Public API docs, generated code, vendored files, and license headers.
 - Comments that link a ticket, spec, RFC, or CVE.
 - Explanations of genuinely non-obvious algorithms, invariants, or math.
+
+When an agent returns, copy its matches and tallies into the walk list and start step 4 on that slice. Do not wait for the other slices: their second checks then run while the loop is still going.
 
 Done when every smell in the table has a tally.
 
@@ -72,8 +74,8 @@ Run every check in parallel. Each agent is a frontier model on the other family 
 
 The mode sets the debates:
 
-- **Fast:** one debate for all the high matches. It runs one round, then the judge rules on what is still open.
-- **Max:** one debate for all the high matches, as in fast mode, but with the `debate` skill's full rounds.
+- **Fast:** one debate for each slice's high matches. It runs one round, then the judge rules on what is still open.
+- **Max:** one debate for each slice's high matches, as in fast mode, but with the `debate` skill's full rounds.
 
 Give each debate this brief:
 

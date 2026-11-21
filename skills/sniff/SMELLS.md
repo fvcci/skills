@@ -16,7 +16,7 @@ A match is a hint until a second check rules it real. Each smell's row gives the
 
 | Tier | A ruling on the match needs | The second check |
 |---|---|---|
-| **Low** | Only the quoted lines | One agent on the other model family, at medium effort, takes every low match together |
+| **Low** | Only the quoted lines | One agent on the other model family, at medium effort, takes every low match from one slice together |
 | **Medium** | Code beyond the diff, or the request | One agent on the other model family, at high effort, for each match |
 | **High** | A library fact, or a judgement about a boundary | A debate, run with the `debate` skill, its challenger and judge at high effort |
 

@@ -45,7 +45,7 @@ Picking them:
 
 ## 3. Rounds
 
-Run challenger, then defender, for up to 3 rounds: `c1 → d1 → c2 → d2 → c3 → d3`, then the judge.
+Run challenger, then defender, for up to 3 rounds: `c1 → d1 → c2 → d2 → c3 → d3`, then the judge. Start each turn as soon as the previous agent's completion notice arrives, not from a wait or polling loop, because a run blocked in a foreground wait leaves every debate idle until the wait ends.
 
 - Round 1: the challenger contests as many items as warranted, strongest first.
 - Rounds 2 and 3: answer only the other side's open items. No new targets.
@@ -55,7 +55,7 @@ Each agent writes only its own file in the debate folder and never edits the doc
 
 - Challenger: `r<n>-challenger.md`, one entry per item: **C<n>-<id>. <item>: <verdict>**, then evidence, then the change test (which future change would touch which item).
 - Defender: `r<n>-defender.md`, one entry per open item: **D<n>-<id>: accept | defend | counter-proposal**, then evidence.
-- Judge: `judge.md`, one line per contested item: **<id>. <item>: <final verdict>** · winner (challenger / defender / both partly) · one-line reason. Then totals before and after.
+- Judge: `verdict.md` (not `judge.md`: on a case-insensitive filesystem it is the same file as `JUDGE.md` and overwrites the criteria), one line per contested item: **<id>. <item>: <final verdict>** · winner (challenger / defender / both partly) · one-line reason. Then totals before and after.
 
 The final message from each agent is counts by verdict plus its file path, under 100 words, in plain text.
 
